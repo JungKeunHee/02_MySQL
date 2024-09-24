@@ -106,7 +106,7 @@ select
 from
 	employee
 where
-	PHONE like '0109%';
+	PHONE like '01_9%';
 	
     
 -- EMPLOYEE테이블에서 전화번호 국번이 4자리 이면서
@@ -118,7 +118,7 @@ select
 from
 	employee
 where
-	PHONE like '0109999%';
+	PHONE like '01_9_______%';
 
 -- 부서코드가 'D6' 이거나 'D8'인 직원의
 -- 이름, 부서, 급여를 조회하세요
