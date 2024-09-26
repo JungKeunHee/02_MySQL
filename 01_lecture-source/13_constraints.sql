@@ -118,3 +118,44 @@ values
 -- error 1452 : 참조하고 있는 테이블(부모 테이블) 에는 존재하지 않는 값을 집어넣을 때
 -- 발생하는 에러 => foreign key 제약조건 위반
 (3, 'user02', 'pass02', '정근희2', '남', '010-3339-0832', 'keunhee0920@gmail.com', 25);
+
+
+-- check 제약조건
+-- 조건을 위반할 시 허용하지 않는 제약조건
+drop table if exists user_check;
+
+-- 술을 파는 사이트, 미성년자 접속 불가
+-- 성별은 2가지 값만 받을 것이다.
+create table if not exists user_check(
+	user_no int auto_increment primary key,	
+    user_name varchar(30) not null,
+    gender varchar(3) check(gender in('남', '여')),
+    age int check(age >= 19) 
+) engine=innodb;
+
+insert into user_check
+values
+(null, '홍길동', '남', 25),
+(null, '하츄핑', '여', 7);
+
+describe user_check;
+select * from user_check;
+
+-- default
+-- nullable 한 컬럼에 비어있는 값 대신 우리가 설정한 기본값 적용
+drop table if exists tbl_country;
+create table if not exists tbl_country(
+	country_code int auto_increment primary key,	
+    country_name varchar(255) default '한국',
+    population varchar(255) default '0명',
+    add_time datetime default(current_time()),
+    add_day date default(current_date())
+) engine=innodb;
+
+insert into tbl_country
+values
+(null, default, default, default, default);
+
+select * from tbl_country;
+describe tbl_country;
+
