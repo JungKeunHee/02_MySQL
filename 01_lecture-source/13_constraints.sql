@@ -135,7 +135,7 @@ create table if not exists user_check(
 
 insert into user_check
 values
-(null, '홍길동', '남', 25),
+(null, '홍길동', '남', 25), 
 (null, '하츄핑', '여', 7);
 
 describe user_check;
