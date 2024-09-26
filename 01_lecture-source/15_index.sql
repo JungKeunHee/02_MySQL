@@ -33,15 +33,3 @@ select * from phone where phone_name = '갤럭시Z폴드6';
 explain select * from phone where phone_name = '갤럭시Z폴드6';
 
 drop index idx_name on phone;
-
-
-
-
-
-
-
-
-
-
-
-
