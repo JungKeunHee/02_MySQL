@@ -117,10 +117,11 @@ select
 	a.EMP_NAME,
     b.DEPT_TITLE,
     c.LOCAL_NAME,
-    if((c.NATIONAL_CODE = 'KO'), '한국', '일본') as NATIONAL_NAME
+	d.NATIONAL_NAME
 from
 	employee as a
     join department as b on a.DEPT_CODE = b.DEPT_ID
     join location as c on b.LOCATION_ID = c.LOCAL_CODE
+    join nation as d on c.NATIONAL_CODE = d.NATIONAL_CODE
 where
-	c.LOCAL_NAME between 'ASIA1' and 'ASIA2';
+	d.NATIONAL_NAME in ('한국', '일본');
