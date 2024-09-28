@@ -406,3 +406,73 @@ ORDER BY
 -- ...
 -- ...
 -- 17 rows selected
+SELECT A.STUDENT_NAME, A.STUDENT_ADDRESS
+FROM tb_student A
+	JOIN tb_department B ON A.DEPARTMENT_NO = B.DEPARTMENT_NO
+WHERE B.DEPARTMENT_NO = (
+						SELECT DEPARTMENT_NO
+                        FROM tb_student
+                        WHERE STUDENT_NAME = '최경희'
+						)
+ORDER BY A.STUDENT_NAME;
+
+-- 18. 국어국문학과에서 총 평점이 가장 높은 학생의 이름과 학번을 표시하는 SQL 문을 작성하시오.
+-- STUDENT_NO STUDENT_NAME
+-- ---------- --------------------
+-- 9931165 송근우
+WITH AvgPoints AS (
+    SELECT
+        A.STUDENT_NO,
+        A.STUDENT_NAME,
+        AVG(C.POINT) AS 평점
+    FROM
+        tb_student A
+    JOIN
+        tb_grade C ON A.STUDENT_NO = C.STUDENT_NO
+    WHERE
+        A.DEPARTMENT_NO = (
+            SELECT DEPARTMENT_NO
+            FROM tb_department
+            WHERE DEPARTMENT_NAME = '국어국문학과'
+        )
+    GROUP BY
+        A.STUDENT_NO, A.STUDENT_NAME
+)
+SELECT
+    SUBSTRING(STUDENT_NO, 2, 7) AS 학번,
+    STUDENT_NAME AS 학생이름
+FROM
+    AvgPoints
+WHERE
+    평점 = (SELECT MAX(평점) FROM AvgPoints);
+            
+-- 19. 춘 기술대학교의 "환경조경학과"가 속한 같은 계열 학과들의 학과 별 전공과목 평점을 파악하기 위한 적절한 SQL 문을 찾아내시오.
+-- 단, 출력헤더는 "계열 학과명", "전공평점"으로 표시되도록 하고, 평점은 소수점 한 자리까지만 반올림하여 표시되도록 한다.
+-- 계열 학과명 전공평점
+-- -------------------- --------
+-- 간호학과 3.2
+-- 물리학과 3.3
+-- ...
+-- ...
+-- 환경조경학과 3.3
+-- 20 rows selected
+select
+	a.DEPARTMENT_NAME,
+    round(avg(c.POINT),1)
+from
+	tb_department a
+    join tb_student b on a.DEPARTMENT_NO = b.DEPARTMENT_NO
+    join tb_grade c on b.STUDENT_NO = c.STUDENT_NO
+where
+	a.CATEGORY = (
+				select
+					CATEGORY
+				from
+					tb_department
+				where
+					DEPARTMENT_NAME = '환경조경학과'
+				 )
+group by
+	a.DEPARTMENT_NAME
+order by
+	a.DEPARTMENT_NAME;
