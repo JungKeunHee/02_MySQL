@@ -1,3 +1,4 @@
+use chundb;
 -- 1. 학생이름과 주소지를 표시하시오. 단, 출력 헤더는 "학생 이름", "주소지"로 하고, 정렬은 이름으로 오름차순 표시하도록 한다.
 -- 학생 이름 주소지
 -- -------------------- ----------------------------------------------------------
@@ -33,9 +34,7 @@ select
 from
 	tb_student
 where
-	ABSENCE_YN = 'Y' and
-    year(now()) - (if(substring(STUDENT_SSN, 1, 2) between 50 and 99,
-    1900 + substring(STUDENT_SSN, 1, 2), 2000 + substring(STUDENT_SSN, 1, 2)))
+	ABSENCE_YN = 'Y'
 order by
 	year(now()) - (if(substring(STUDENT_SSN, 1, 2) between 50 and 99,
     1900 + substring(STUDENT_SSN, 1, 2), 2000 + substring(STUDENT_SSN, 1, 2)));
