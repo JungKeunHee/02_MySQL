@@ -1,3 +1,5 @@
+use employee;
+use chundb;
 -- 1.부서코드가 노옹철 사원과 같은 소속의 직원 명단 조회
 select
 	EMP_NAME
@@ -130,15 +132,72 @@ where
 -- 사번, 이름, 직급코드, 급여를 조회하세요
 -- 단, 급여와 급여 평균은 만원단위로 계산하세요
 -- 힌트 : round(컬럼명, -5)
+with 평균급여 as (
+	select
+		JOB_CODE,
+		round(avg(SALARY), -5) as 직급별평균급여
+	from
+		employee
+	group by
+		JOB_CODE
+)
+select
+	a.EMP_ID,
+    a.EMP_NAME,
+    a.JOB_CODE,
+    a.SALARY
+from
+	employee a
+    join 평균급여 b on a.JOB_CODE = b.JOB_CODE
+where
+	a.SALARY >= b.직급별평균급여;
 
 -- 8.퇴사한 여직원과 같은 부서, 같은 직급에 해당하는
 -- 사원의 이름, 직급, 부서, 입사일을 조회
-
+select
+	EMP_NAME,
+    JOB_CODE,
+    DEPT_CODE,
+    HIRE_DATE
+from
+	employee
+where
+	EMP_NO like '______-2%' and
+    DEPT_CODE = (
+				select
+					DEPT_CODE
+				from
+					(
+                    select
+						JOB_CODE
+					from
+						employee
+					where
+						ENT_YN = 'Y'
+                    ) as ENT_DATE
+				where
+					ENT_YN = 'Y'
+				);
 
 -- 9.급여 평균 3위 안에 드는 부서의 
 -- 부서 코드와 부서명, 평균급여를 조회하세요
 -- limit 사용
-
+with 평균급여 as (
+	select
+		DEPT_CODE,
+		avg(SALARY)
+	from
+		employee
+	group by
+		DEPT_CODE
+	)
+select
+	a.DEPT_CDOE,
+    b.DEPT_TITLE,
+    avg(a.SALARY)
+from
+	
+    
 
 -- 10.직원 정보에서 급여를 가장 많이 받는 순으로 이름, 급여, 순위 조회
 -- 힌트 : DENSE_RANK() OVER or RANK() OVER
