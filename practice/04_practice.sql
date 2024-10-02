@@ -182,27 +182,55 @@ where
 -- 9.급여 평균 3위 안에 드는 부서의 
 -- 부서 코드와 부서명, 평균급여를 조회하세요
 -- limit 사용
-with 평균급여 as (
-	select
-		DEPT_CODE,
-		avg(SALARY)
-	from
-		employee
-	group by
-		DEPT_CODE
-	)
 select
-	a.DEPT_CDOE,
-    b.DEPT_TITLE,
-    avg(a.SALARY)
+	DEPT_CODE,
+    DEPT_TITLE,
+    avg(SALARY)
 from
-	
-    
+	employee a
+    join department b on a.DEPT_CODE = b.DEPT_ID
+group by
+	DEPT_CODE
+order by
+	avg(SALARY) desc
+limit 3;
 
 -- 10.직원 정보에서 급여를 가장 많이 받는 순으로 이름, 급여, 순위 조회
 -- 힌트 : DENSE_RANK() OVER or RANK() OVER
+select
+	EMP_NAME,
+    SALARY,
+	dense_rank() over (order by SALARY desc) as 순위
+from
+	employee;
 
 
 -- 11.부서별 급여 합계가 전체 급여의 총 합의 20%보다 많은
 -- 부서의 부서명과, 부서별 급여 합계 조회
 -- 힌트 : SUM(E2.SALARY) * 0.2
+with 전체급여 as (
+	select
+		sum(SALARY) as 부서전체합계급여
+	from
+		employee a
+        join department b on a.DEPT_CODE = b.DEPT_ID
+)
+
+
+select
+	a.DEPT_TITLE,
+    sum(b.SALARY) as 부서별급여합계
+from
+	department a
+    join employee b on a.DEPT_ID = b.DEPT_CODE
+
+group by
+	a.DEPT_TITLE
+having
+ sum(b.SALARY) > (
+				 select
+					부서전체합계급여
+				 from
+					전체급여
+				 ) * 0.2;
+	

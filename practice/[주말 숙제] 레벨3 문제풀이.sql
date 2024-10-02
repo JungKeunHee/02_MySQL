@@ -1,4 +1,6 @@
 use chundb;
+use employee;
+use menudb;
 -- 1. 학생이름과 주소지를 표시하시오. 단, 출력 헤더는 "학생 이름", "주소지"로 하고, 정렬은 이름으로 오름차순 표시하도록 한다.
 -- 학생 이름 주소지
 -- -------------------- ----------------------------------------------------------
@@ -185,13 +187,12 @@ order by
 select
 	a.CLASS_NAME,
     b.PROFESSOR_NAME
-    
 from
 	tb_class a
     join tb_professor b on a.DEPARTMENT_NO = b.DEPARTMENT_NO
     join tb_department c on a.DEPARTMENT_NO = c.DEPARTMENT_NO
 where
-	c.CATEGORY  = '인문사회';
+	c.CATEGORY = '인문사회';
     
 -- 10. ‘음악학과’ 학생들의 평점을 구하려고 한다. 음악학과 학생들의 "학번", "학생 이름", "전체 평점"을 출력하는 SQL 문장을 작성하시오.
 -- (단, 평점은 소수점 1 자리까지만 반올림하여 표시한다.)
@@ -443,7 +444,10 @@ SELECT
 FROM
     AvgPoints
 WHERE
-    평점 = (SELECT MAX(평점) FROM AvgPoints);
+    평점 = (
+			SELECT MAX(평점)
+			FROM AvgPoints
+            );
             
 -- 19. 춘 기술대학교의 "환경조경학과"가 속한 같은 계열 학과들의 학과 별 전공과목 평점을 파악하기 위한 적절한 SQL 문을 찾아내시오.
 -- 단, 출력헤더는 "계열 학과명", "전공평점"으로 표시되도록 하고, 평점은 소수점 한 자리까지만 반올림하여 표시되도록 한다.
